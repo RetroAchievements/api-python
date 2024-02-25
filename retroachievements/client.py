@@ -1,9 +1,11 @@
 import requests as request
+from retroachievements import __version__
 
 
 class RAClient:
 
-    headers = {"User-Agent": "RetroAchievements-api-python/1.0.0"}
+    headers = {
+        "User-Agent": "RetroAchievements-api-python/" + __version__}
 
     def __init__(self, username, api_key):
         self.username = username
@@ -80,7 +82,8 @@ class RAClient:
         Params:
             i: The game ID to query
         """
-        result = self._call_api("API_GetAchievementCount.php?", {"i": game}).json()
+        result = self._call_api(
+            "API_GetAchievementCount.php?", {"i": game}).json()
         return result
 
     def GetAchievementDistribution(self, game: int) -> dict:
@@ -119,6 +122,7 @@ class RAClient:
             h: If 1, also return the supported hashes for games (default = 0)
         """
         result = self._call_api(
-            "API_GetGameList.php?", {"i": system, "f": has_cheevos, "h": hashes}
+            "API_GetGameList.php?", {
+                "i": system, "f": has_cheevos, "h": hashes}
         ).json()
         return result
