@@ -11,12 +11,17 @@ class RAClient:
         self.username = username
         self.api_key = api_key
 
-    # URL construction
-    def _call_api(self, endpoint, params={}, timeout=30, headers=headers):
+    def url_params(self, params=None):
+        if params is None:
+            params = {}
         params.update({"z": self.username, "y": self.api_key})
+        return params
+
+    # URL construction
+    def _call_api(self, endpoint, params, timeout=30, headers=headers):
         req = request.get(
             f"https://retroachievements.org/API/{endpoint}",
-            params=params,
+            params=self.url_params(params),
             timeout=timeout,
             headers=headers,
         )
@@ -109,7 +114,7 @@ class RAClient:
         Params:
             None
         """
-        result = self._call_api("API_GetConsoleIDs.php?").json()
+        result = self._call_api("API_GetConsoleIDs.php?", {None}).json()
         return result
 
     def GetGameList(self, system: int, has_cheevos=0, hashes=0) -> dict:
