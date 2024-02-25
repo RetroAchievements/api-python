@@ -84,7 +84,7 @@ class RAClient:
         result = self._call_api("API_GetAchievementCount.php?", {"i": game}).json()
         return result
 
-    def GetAchievementDistrobution(self, game: int) -> dict:
+    def GetAchievementDistribution(self, game: int) -> dict:
         """
         Get how many players have unlocked how many achievements for a game
 
@@ -92,7 +92,7 @@ class RAClient:
             i: The game ID to query
         """
         result = self._call_api(
-            "API_GetAchievementDistrobution.php?", {"i": game}
+            "API_GetAchievementDistribution.php?", {"i": game}
         ).json()
         return result
 
