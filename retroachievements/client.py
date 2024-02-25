@@ -3,10 +3,7 @@ import requests as request
 
 class RAClient:
 
-    # Header (required to pass cloudflare consistantly)
-    headers = {
-        "User-Agent": "api-python/0.1 - RetroAchievements Web API Python Wrapper"
-    }
+    headers = {"User-Agent": "RetroAchievements-api-python/1.0.0"}
 
     def __init__(self, username, api_key):
         self.username = username
