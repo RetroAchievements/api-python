@@ -3,6 +3,9 @@ from retroachievements import __version__
 
 
 class RAClient:
+    """
+    Main class for accessing the RetroAhievements Web API
+    """
 
     headers = {
         "User-Agent": "RetroAchievements-api-python/" + __version__}
@@ -12,6 +15,9 @@ class RAClient:
         self.api_key = api_key
 
     def url_params(self, params=None):
+        """
+        Inserts the auth and query params into the request
+        """
         if params is None:
             params = {}
         params.update({"z": self.username, "y": self.api_key})
@@ -29,9 +35,7 @@ class RAClient:
         )
         return req
 
-    """
-    User endpoints
-    """
+    # User endpoints
 
     def GetUserPoints(self, user: str) -> dict:
         """
@@ -58,9 +62,7 @@ class RAClient:
         ).json()
         return result
 
-    """
-    Game endpoints
-    """
+    # Game endpoints
 
     def GetGame(self, game: int) -> dict:
         """
@@ -105,9 +107,7 @@ class RAClient:
         ).json()
         return result
 
-    """
-    System Endpoints
-    """
+    # System Endpoints
 
     def GetConsoleIds(self) -> list:
         """
