@@ -18,7 +18,9 @@ class RAClient:
         return params
 
     # URL construction
-    def _call_api(self, endpoint, params, timeout=30, headers=headers):
+    def _call_api(self, endpoint=None, params=None, timeout=30, headers=None):
+        if endpoint is None:
+            endpoint = {}
         req = request.get(
             f"https://retroachievements.org/API/{endpoint}",
             params=self.url_params(params),
