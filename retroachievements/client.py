@@ -50,7 +50,9 @@ class RAClient:
         result = self._call_api("API_GetUserPoints.php?", {"u": user}).json()
         return result
 
-    def get_user_summary(self, user: str, recent_games=0, recent_cheevos=10) -> dict:
+    def get_user_summary(self, user: str,
+                         recent_games=0,
+                         recent_cheevos=10) -> dict:
         """
         Get a user's exhaustive profile metadata
 
