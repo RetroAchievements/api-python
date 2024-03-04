@@ -37,7 +37,7 @@ class RAClient:
 
     # User endpoints
 
-    def GetUserPoints(self, user: str) -> dict:
+    def get_user_points(self, user: str) -> dict:
         """
         Get a user's total hardcore and softcore points
 
@@ -47,7 +47,7 @@ class RAClient:
         result = self._call_api("API_GetUserPoints.php?", {"u": user}).json()
         return result
 
-    def GetUserSummary(self, user: str, recent_games=0, recent_cheevos=10) -> dict:
+    def get_user_summary(self, user: str, recent_games=0, recent_cheevos=10) -> dict:
         """
         Get a user's exhaustive profile metadata
 
@@ -64,7 +64,7 @@ class RAClient:
 
     # Game endpoints
 
-    def GetGame(self, game: int) -> dict:
+    def get_game(self, game: int) -> dict:
         """
         Get basic metadata about a game
 
@@ -74,7 +74,7 @@ class RAClient:
         result = self._call_api("API_GetGame.php?", {"i": game}).json()
         return result
 
-    def GetGameExtended(self, game: int) -> dict:
+    def get_game_extended(self, game: int) -> dict:
         """
         Get extended metadata about a game
 
@@ -84,7 +84,7 @@ class RAClient:
         result = self._call_api("API_GetGameExtended.php?", {"i": game}).json()
         return result
 
-    def GetAchievementCount(self, game: int) -> dict:
+    def get_achievement_count(self, game: int) -> dict:
         """
         Get the list of achievement ID's for a game
 
@@ -95,7 +95,7 @@ class RAClient:
             "API_GetAchievementCount.php?", {"i": game}).json()
         return result
 
-    def GetAchievementDistribution(self, game: int) -> dict:
+    def get_achievement_distribution(self, game: int) -> dict:
         """
         Get how many players have unlocked how many achievements for a game
 
@@ -109,17 +109,17 @@ class RAClient:
 
     # System Endpoints
 
-    def GetConsoleIds(self) -> list:
+    def get_console_ids(self) -> list:
         """
         Get the complete list of console ID and name pairs on the site
 
         Params:
             None
         """
-        result = self._call_api("API_GetConsoleIDs.php?", {None}).json()
+        result = self._call_api("API_GetConsoleIDs.php?", {}).json()
         return result
 
-    def GetGameList(self, system: int, has_cheevos=0, hashes=0) -> dict:
+    def get_game_list(self, system: int, has_cheevos=0, hashes=0) -> dict:
         """
         Get the complete list of games for a console
 
