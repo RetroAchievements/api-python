@@ -2,6 +2,9 @@ import requests as request
 from retroachievements import __version__
 
 
+_BASE_URL = "https://retroachievements.org/API/"
+
+
 class RAClient:
     """
     Main class for accessing the RetroAhievements Web API
@@ -28,7 +31,7 @@ class RAClient:
         if endpoint is None:
             endpoint = {}
         req = request.get(
-            f"https://retroachievements.org/API/{endpoint}",
+            f"{_BASE_URL}{endpoint}",
             params=self.url_params(params),
             timeout=timeout,
             headers=headers,
