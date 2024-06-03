@@ -68,9 +68,9 @@ class RAClient:
         return result
 
 
-    def get_recent_achievements(self, user: str) -> list:
+    def get_recent_achievements(self, user: str) -> dict:
         """
-        Get a user's most recent achievement
+        Get a user's most recent achievement within the last hour
 
         Params:
             u: Username to query
@@ -101,7 +101,38 @@ class RAClient:
         result = self._call_api("API_GetAchievementsEarnedOnDay.php?", {"u": user, "d": date}).json()
         return result
 
-        
+    def get_achievements_range(self, user: str, f: int, t: int) -> dict:
+        """
+        Get a user's cheevos from a specific date
+
+        Params:
+            u: Username to query
+            f: From date to query (must be in epoch timestamp format)
+            t: To date to query (must be in epoch timestamp format)
+        """
+        result = self._call_api("API_GetAchievementsEarnedOnDay.php?", {"u": user, "f": f, "t": t }).json()
+        return result
+
+    def get_all_completion_progress(self, user: str) -> dict:
+        """
+        Get a user's info and progress on all games
+
+        Params:
+            u: Username to query
+        """
+        result = self._call_api("API_GetUserCompletionProgress.php?", {"u": user}).json()
+        return result
+
+    def get_awards_badges(self, user: str) -> list:
+        """
+        Get a user's awards and badges on RA
+
+        Params:
+            u: Username to query
+        """
+        result = self._call_api("API_GetUserAwards.php?", {"u": user}).json()
+        return result
+ 
 
     # Game endpoints
 
