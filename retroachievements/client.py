@@ -67,6 +67,42 @@ class RAClient:
         ).json()
         return result
 
+
+    def get_recent_achievements(self, user: str) -> list:
+        """
+        Get a user's most recent achievement
+
+        Params:
+            u: Username to query
+        """
+        result = self._call_api("API_GetUserRecentAchievements.php?", {"u": user}).json()
+        return result
+
+    def get_game_progress(self, user: str, game: int) -> dict:
+        """
+        Get a users recent game info and progress
+
+        Params:
+            g: Game ID 
+            u: Username to query
+        """
+        result = self._call_api("API_GetGameInfoAndUserProgress.php?", {"g": game, "u": user}).json()
+        return result
+
+
+    def get_achievements_on_day(self, user: str, date: int) -> dict:
+        """
+        Get a user's cheevos from a specific date
+
+        Params:
+            u: Username to query
+            d: Date to query
+        """
+        result = self._call_api("API_GetAchievementsEarnedOnDay.php?", {"u": user, "d": date}).json()
+        return result
+
+        
+
     # Game endpoints
 
     def get_game(self, game: int) -> dict:
