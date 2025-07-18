@@ -1,5 +1,5 @@
 [project]
-name = "python-stack"
+name = "api-python"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
