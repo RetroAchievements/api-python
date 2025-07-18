@@ -1,0 +1,35 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: check-yaml
+        args: [--unsafe]
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+-   repo: local
+    hooks:
+    -   id: ruff fix
+        name: Check and fix Python linting with ruff
+        entry: ruff check
+        types: [python]
+        language: system
+    -   id: ruff format
+        name: Autoformat Python files with ruff
+        entry: ruff format
+        types: [python]
+        language: system
+    -   id: pyright
+        name: Type checking with pyright
+        entry: pyright
+        types: [python]
+        language: system
+-   repo: https://github.com/jendrikseipp/vulture
+    rev: 'v2.14'
+    hooks:
+    -   id: vulture
+        name: Check unused Python code
+-   repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.5.14
+    hooks:
+    -   id: uv-lock
+        name: Check if uv.lock is up to date

@@ -1,0 +1,27 @@
+[project]
+name = "python-stack"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.32.4",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+    "pyright>=1.1.403",
+    "ruff>=0.12.4",
+]
+
+[tool.pyright]
+reportIncompatibleMethodOverride = true
+typeCheckingMode = "strict"
+
+[tool.ruff]
+src = [".", "retroachievements"]
+line-length = 88
+
+[tool.ruff.lint]
+extend-select = ["I"]
