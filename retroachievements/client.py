@@ -8,8 +8,14 @@ from retroachievements.models.get_game_leaderboards_response import (
     GetGameLeaderboardsResponse,
 )
 from retroachievements.models.get_game_response import GetGameResponse
+from retroachievements.models.get_leaderboard_entries_response import (
+    GetLeaderboardEntriesResponse,
+)
 from retroachievements.models.get_user_completed_games_response import (
     GetUserCompletedGamesResponse,
+)
+from retroachievements.models.get_user_game_leaderboards_response import (
+    GetUserGameLeaderboardsResponse,
 )
 from retroachievements.models.get_user_set_requests_response import (
     GetUserSetRequestsResponse,
@@ -501,7 +507,7 @@ class RAClient:
 
     def get_leaderboard_entries(
         self, leaderboard: int, count: int = 100, offset: int = 0
-    ) -> dict:
+    ) -> GetLeaderboardEntriesResponse:
         """
         Get the entries of a leaderboard
 
@@ -518,7 +524,7 @@ class RAClient:
 
     def get_user_game_leaderboards(
         self, game: int, user: str, count: int = 200, offset: int = 0
-    ) -> dict:
+    ) -> GetUserGameLeaderboardsResponse:
         """
         Get a user's leaderboard entries for a game
 
