@@ -1,6 +1,6 @@
 from typing import TypedDict
 
-from retroachievements.models.get_most_recent_tickets import TicketEntity
+from retroachievements.endpoints.get_most_recent_tickets import TicketEntity
 
 
 class GetGameTicketStatsResponse(TypedDict):

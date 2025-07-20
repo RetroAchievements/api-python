@@ -14,44 +14,6 @@ AwardType = Literal[
 ]
 
 
-class UserProfileResponse(TypedDict):
-    User: str
-    UserPic: str
-    MemberSince: str
-    RichPresenceMsg: str
-    LastGameID: int
-    ContribCount: int
-    ContribYield: int
-    TotalPoints: int
-    TotalSoftcorePoints: int
-    TotalTruePoints: int
-    Permissions: int
-    Untracked: int
-    ID: int
-    UserWallActive: int
-    Motto: str
-
-
-class GetUserRecentAchievementsEntity(TypedDict):
-    Date: str
-    HardcoreMode: int  # 0 or 1
-    AchievementID: int
-    Title: str
-    Description: str
-    BadgeName: str
-    Points: int
-    Author: str
-    GameTitle: str
-    GameIcon: str
-    GameID: int
-    ConsoleName: str
-    BadgeURL: str
-    GameURL: str
-
-
-GetUserRecentAchievementsResponse = list[GetUserRecentAchievementsEntity]
-
-
 class DatedUserAchievementResponseEntity(TypedDict):
     Date: str
     HardcoreMode: str

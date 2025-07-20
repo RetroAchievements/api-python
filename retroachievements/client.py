@@ -1,56 +1,62 @@
 import datetime
 import logging
 
-import requests
-
-from retroachievements import __version__
-from retroachievements.models.get_achievement_of_the_week import (
+from retroachievements.base import BaseRAClient
+from retroachievements.endpoints.get_achievement_of_the_week import (
     GetAchievementOfTheWeekResponse,
 )
-from retroachievements.models.get_achievement_ticket_stats import (
+from retroachievements.endpoints.get_achievement_ticket_stats import (
     GetAchievementTicketStatsResponse,
 )
-from retroachievements.models.get_achievement_unlocks import (
+from retroachievements.endpoints.get_achievement_unlocks import (
     GetAchievementUnlocksResponse,
 )
-from retroachievements.models.get_comments import GetCommentsResponse
-from retroachievements.models.get_console_ids import GetConsoleIdsResponse
-from retroachievements.models.get_developer_ticket_stats import (
+from retroachievements.endpoints.get_comments import GetCommentsResponse
+from retroachievements.endpoints.get_console_ids import GetConsoleIdsResponse
+from retroachievements.endpoints.get_developer_ticket_stats import (
     GetDeveloperTicketStatsResponse,
 )
-from retroachievements.models.get_game_leaderboards_response import (
+from retroachievements.endpoints.get_game_leaderboards_response import (
     GetGameLeaderboardsResponse,
 )
-from retroachievements.models.get_game_list import GetGameListResponse
-from retroachievements.models.get_game_response import GetGameResponse
-from retroachievements.models.get_game_ticket_stats import GetGameTicketStatsResponse
-from retroachievements.models.get_leaderboard_entries_response import (
+from retroachievements.endpoints.get_game_list import GetGameListResponse
+from retroachievements.endpoints.get_game_response import GetGameResponse
+from retroachievements.endpoints.get_game_ticket_stats import GetGameTicketStatsResponse
+from retroachievements.endpoints.get_leaderboard_entries_response import (
     GetLeaderboardEntriesResponse,
 )
-from retroachievements.models.get_most_recent_tickets import (
+from retroachievements.endpoints.get_most_recent_tickets import (
     GetMostRecentTicketsResponse,
 )
-from retroachievements.models.get_most_ticketed_games import (
+from retroachievements.endpoints.get_most_ticketed_games import (
     GetMostTicketedGamesResponse,
 )
-from retroachievements.models.get_ticket_by_id import GetTicketByIdResponse
-from retroachievements.models.get_user_completed_games_response import (
+from retroachievements.endpoints.get_ticket_by_id import GetTicketByIdResponse
+from retroachievements.endpoints.get_user_completed_games_response import (
     GetUserCompletedGamesResponse,
 )
-from retroachievements.models.get_user_game_leaderboards_response import (
+from retroachievements.endpoints.get_user_game_leaderboards_response import (
     GetUserGameLeaderboardsResponse,
 )
-from retroachievements.models.get_user_set_requests_response import (
+from retroachievements.endpoints.get_user_set_requests_response import (
     GetUserSetRequestsResponse,
 )
-from retroachievements.models.get_user_summary_response import GetUserSummaryResponse
-from retroachievements.models.get_user_want_to_play_list_response import (
+from retroachievements.endpoints.get_user_summary_response import GetUserSummaryResponse
+from retroachievements.endpoints.get_user_want_to_play_list_response import (
     GetUserWantToPlayListResponse,
 )
-from retroachievements.models.get_users_following_me_response import (
+from retroachievements.endpoints.get_users_following_me_response import (
     GetUsersFollowingMeResponse,
 )
-from retroachievements.models.get_users_i_follow_response import GetUsersIFollowResponse
+from retroachievements.endpoints.get_users_i_follow_response import (
+    GetUsersIFollowResponse,
+)
+from retroachievements.endpoints.user.get_user_profile import (
+    get_user_profile,
+)
+from retroachievements.endpoints.user.get_user_recent_achievements import (
+    get_user_recent_achievements,
+)
 from retroachievements.types import (
     DatedUserAchievementResponse,
     GetAchievementCountResponse,
@@ -68,82 +74,22 @@ from retroachievements.types import (
     GetUserGameRankAndScoreResponse,
     GetUserPointsResponse,
     GetUserProgressResponse,
-    GetUserRecentAchievementsResponse,
     GetUserRecentlyPlayedGamesResponse,
-    UserProfileResponse,
 )
-
-_BASE_URL = "https://retroachievements.org/API/"
 
 logger = logging.getLogger(__name__)
 
 
-class RAClient:
-    """
-    Main class for accessing the RetroAchievements Web API
-    """
+class RAClient(BaseRAClient):
+    # user endpoints
 
-    headers = {"User-Agent": "RetroAchievements-api-python/" + __version__}
-
-    def __init__(self, api_key: str):
-        self.api_key = api_key
-
-    def url_params(self, params: dict[str, str | int | None] | None = None):
-        """
-        Inserts the auth and query params into the request
-        """
-        if params is None:
-            params = {}
-        params.update({"y": self.api_key})
-        return params
-
-    # URL construction
-    def _call_api(
-        self,
-        endpoint: str | None = None,
-        params: dict[str, str | int | None] | None = None,
-        timeout: int = 30,
-        headers: dict[str, str] | None = None,
-    ):
-        if endpoint is None:
-            endpoint = ""
-        req = requests.get(
-            f"{_BASE_URL}{endpoint}",
-            params=self.url_params(params),
-            timeout=timeout,
-            headers=headers,
-        )
-        return req
-
-    # User endpoints
-
-    def get_user_profile(self, user: str, ulid: str) -> UserProfileResponse:
-        """
-        Get a user's profile information
-
-        Params:
-            u: Username to query
-            i: ULID to query
-        """
-        result = self._call_api(
-            "API_GetUserProfile.php?", {"u": user, "i": ulid}
-        ).json()
-        return result
+    def get_user_profile(self, username: str):
+        return get_user_profile(self, username)
 
     def get_user_recent_achievements(
-        self, user: str, minutes: int = 60
-    ) -> GetUserRecentAchievementsResponse:
-        """
-        Get a user's recent achievements
-
-        Params:
-            u: Username or ULID to query
-            m: Minutes to look back, default = 60
-        """
-        result = self._call_api(
-            "API_GetUserRecentAchievements.php?", {"u": user, "m": minutes}
-        ).json()
-        return result
+        self, username: str, recent_minutes: int | None = 60
+    ):
+        return get_user_recent_achievements(self, username, recent_minutes)
 
     def get_user_achievements_earned_between(
         self, user: str, start: int, end: int
@@ -156,7 +102,7 @@ class RAClient:
             f: Epoch timestamp. Time range start.
             t: Epoch timestamp. Time range end.
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetAchievementsEarnedBetween.php?", {"u": user, "s": start, "e": end}
         ).json()
         return result
@@ -171,7 +117,7 @@ class RAClient:
             u: Username or ULID to query
             d: Date in YYYY-MM-DD format, default = now
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetAchievementsEarnedOnDay.php?", {"u": user, "d": date}
         ).json()
         return result
@@ -189,7 +135,7 @@ class RAClient:
         """
         if awards not in [0, 1]:
             raise ValueError("Invalid awards value. Must be 0 or 1.")
-        result = self._call_api(
+        result = self.call_api(
             "API_GetGameInfoAndUserProgress.php?", {"u": user, "g": game, "a": awards}
         ).json()
         return result
@@ -205,7 +151,7 @@ class RAClient:
             c: Count, the number of records to return (default = 100, max = 500)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUserCompletionProgress.php?", {"u": user, "c": count, "o": offset}
         ).json()
         return result
@@ -217,7 +163,7 @@ class RAClient:
         Params:
             u: Username or ULID to query
         """
-        result = self._call_api("API_GetUserAwards.php?", {"u": user}).json()
+        result = self.call_api("API_GetUserAwards.php?", {"u": user}).json()
         return result
 
     def get_user_claims(self, user: str) -> GetUserClaimsResponse:
@@ -227,7 +173,7 @@ class RAClient:
         Params:
             u: Username or ULID to query
         """
-        result = self._call_api("API_GetUserClaims.php?", {"u": user}).json()
+        result = self.call_api("API_GetUserClaims.php?", {"u": user}).json()
         return result
 
     def get_user_game_rank_and_score(
@@ -240,7 +186,7 @@ class RAClient:
             u: Username or ULID to query
             g: Game ID to query
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUserGameRankAndScore.php?", {"u": user, "g": game}
         ).json()
         return result
@@ -252,7 +198,7 @@ class RAClient:
         Params:
             u: Username or ULID to query
         """
-        result = self._call_api("API_GetUserPoints.php?", {"u": user}).json()
+        result = self.call_api("API_GetUserPoints.php?", {"u": user}).json()
         return result
 
     def get_user_progress(self, user: str, games: list[int]) -> GetUserProgressResponse:
@@ -268,7 +214,7 @@ class RAClient:
             "game IDs, get_user_completion_progress will almost certainly be "
             "better-suited for your use case."
         )
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUserProgress.php?",
             {"u": user, "i": ",".join([str(game) for game in games])},
         ).json()
@@ -285,7 +231,7 @@ class RAClient:
             c: Count, the number of records to return (default = 10, max = 50)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUserRecentlyPlayedGames.php?", {"u": user, "c": count, "o": offset}
         ).json()
         return result
@@ -311,7 +257,7 @@ class RAClient:
             "recent achievements back. Similarly, with the default of 0 recent games, no "
             "recent achievements will be returned.",
         )
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUserSummary.php?",
             {"u": user, "g": games_count, "a": achievements_count},
         ).json()
@@ -331,7 +277,7 @@ class RAClient:
             "This endpoint is considered 'legacy'. The get_user_completion_progress "
             "endpoint will almost always be a better fit for your use case."
         )
-        result = self._call_api("API_GetUserCompletedGames.php?", {"u": user}).json()
+        result = self.call_api("API_GetUserCompletedGames.php?", {"u": user}).json()
         return result
 
     def get_user_want_to_play_list(
@@ -345,7 +291,7 @@ class RAClient:
             c: Count, the number of records to return (default = 100, max = 500)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUserWantToPlayList.php?", {"u": user, "c": count, "o": offset}
         ).json()
         return result
@@ -361,7 +307,7 @@ class RAClient:
             c: Count, the number of records to return (default = 100, max = 500)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUsersIFollow.php?", {"u": user, "c": count, "o": offset}
         ).json()
         return result
@@ -377,7 +323,7 @@ class RAClient:
             c: Count, the number of records to return (default = 100, max = 500)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUsersFollowingMe.php?", {"u": user, "c": count, "o": offset}
         ).json()
         return result
@@ -395,7 +341,7 @@ class RAClient:
         if list_type not in [0, 1]:
             raise ValueError("Invalid list type. Must be 0 or 1.")
 
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUserSetRequests.php?", {"u": user, "t": list_type}
         ).json()
         return result
@@ -409,7 +355,7 @@ class RAClient:
         Params:
             i: The game ID to query
         """
-        result = self._call_api("API_GetGame.php?", {"i": game}).json()
+        result = self.call_api("API_GetGame.php?", {"i": game}).json()
         return result
 
     def get_game_extended(
@@ -423,7 +369,7 @@ class RAClient:
             f: Set to 3 for Official achievements, 5 to see Unofficial / Demoted achievements, default = 3
         """
         unofficial = 5 if get_unofficial_achievements else 3
-        result = self._call_api(
+        result = self.call_api(
             "API_GetGameExtended.php?", {"i": game, "f": unofficial}
         ).json()
         return result
@@ -435,7 +381,7 @@ class RAClient:
         Params:
             i: The game ID to query
         """
-        result = self._call_api("API_GetGameHashes.php?", {"i": game}).json()
+        result = self.call_api("API_GetGameHashes.php?", {"i": game}).json()
         return result
 
     def get_achievement_count(self, game: int) -> GetAchievementCountResponse:
@@ -445,7 +391,7 @@ class RAClient:
         Params:
             i: The game ID to query
         """
-        result = self._call_api("API_GetAchievementCount.php?", {"i": game}).json()
+        result = self.call_api("API_GetAchievementCount.php?", {"i": game}).json()
         return result
 
     def get_achievement_distribution(
@@ -463,7 +409,7 @@ class RAClient:
             raise ValueError("Invalid achievement type. Must be 0 or 1.")
         if focus not in [3, 5]:
             raise ValueError("Invalid set type selected. Must be 3 or 5.")
-        result = self._call_api(
+        result = self.call_api(
             "API_GetAchievementDistribution.php?",
             {"i": game, "h": achievement_type, "f": focus},
         ).json()
@@ -481,7 +427,7 @@ class RAClient:
         """
         if list_type not in [0, 1]:
             raise ValueError("Invalid list type. Must be 0 or 1.")
-        result = self._call_api(
+        result = self.call_api(
             "API_GetGameRankAndScore.php?", {"g": game, "t": list_type}
         ).json()
         return result
@@ -499,7 +445,7 @@ class RAClient:
             c: Count, the number of records to return (default = 100, max = 500)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetGameLeaderboards.php?", {"i": game, "c": count, "o": offset}
         ).json()
         return result
@@ -515,7 +461,7 @@ class RAClient:
             c: Count, the number of records to return (default = 100, max = 500)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetLeaderboardEntries.php?",
             {"i": leaderboard, "c": count, "o": offset},
         ).json()
@@ -533,7 +479,7 @@ class RAClient:
             c: Count, the number of records to return (default = 200, max = 500)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetUserGameLeaderboards.php?",
             {"i": game, "u": user, "c": count, "o": offset},
         ).json()
@@ -548,7 +494,7 @@ class RAClient:
         Params:
             None
         """
-        result = self._call_api("API_GetConsoleIDs.php?", {}).json()
+        result = self.call_api("API_GetConsoleIDs.php?", {}).json()
         return result
 
     def get_game_list(
@@ -566,7 +512,7 @@ class RAClient:
             raise ValueError("Invalid has_cheevos value. Must be 0 or 1.")
         if hashes not in [0, 1]:
             raise ValueError("Invalid hashes value. Must be 0 or 1.")
-        result = self._call_api(
+        result = self.call_api(
             "API_GetGameList.php?", {"i": system, "f": has_achievements, "h": hashes}
         ).json()
         return result
@@ -584,7 +530,7 @@ class RAClient:
             c: Count, the number of records to return (default = 50, max = 500)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetAchievementUnlocks.php?",
             {"a": achievement, "c": count, "o": offset},
         ).json()
@@ -616,7 +562,7 @@ class RAClient:
             )
         if sort not in ["submitted", "-submitted"]:
             raise ValueError("Invalid sort order. Must be 'submitted' or '-submitted'.")
-        result = self._call_api(
+        result = self.call_api(
             "API_GetComments.php?",
             {"i": game, "t": target, "c": count, "o": offset, "sort": sort},
         ).json()
@@ -650,7 +596,7 @@ class RAClient:
             raise ValueError(
                 "Invalid kind value. Must be one of 'beaten-softcore', 'beaten-hardcore', 'completed', or 'mastered'."
             )
-        result = self._call_api(
+        result = self.call_api(
             "API_GetRecentGameAwards.php?",
             {"d": date, "o": offset, "c": count, "k": kind},
         ).json()
@@ -663,7 +609,7 @@ class RAClient:
         Params:
             None
         """
-        result = self._call_api("API_GetActiveClaims.php?", {}).json()
+        result = self.call_api("API_GetActiveClaims.php?", {}).json()
         return result
 
     def get_inactive_claims(self, kind: int = 1) -> GetSetClaimsResponse:
@@ -677,7 +623,7 @@ class RAClient:
             raise ValueError(
                 "Invalid kind value. Must be 1 (completed), 2 (dropped) or 3 (expired)."
             )
-        result = self._call_api("API_GetInactiveClaims.php?", {"k": kind}).json()
+        result = self.call_api("API_GetInactiveClaims.php?", {"k": kind}).json()
         return result
 
     def get_top_ten_users(self) -> GetTopTenUsersResponse:
@@ -687,7 +633,7 @@ class RAClient:
         Params:
             None
         """
-        result = self._call_api("API_GetTopTenUsers.php?", {}).json()
+        result = self.call_api("API_GetTopTenUsers.php?", {}).json()
         return result
 
     # Event Endpoints
@@ -699,7 +645,7 @@ class RAClient:
         Params:
             None
         """
-        result = self._call_api("API_GetAchievementOfTheWeek.php?", {}).json()
+        result = self.call_api("API_GetAchievementOfTheWeek.php?", {}).json()
         return result
 
     # Ticket Endpoints
@@ -711,7 +657,7 @@ class RAClient:
         Params:
             i: The ticket ID to query
         """
-        result = self._call_api("API_GetTicketData.php?", {"i": ticket_id}).json()
+        result = self.call_api("API_GetTicketData.php?", {"i": ticket_id}).json()
         return result
 
     def get_most_ticketed_games(self, focus: int = 1) -> GetMostTicketedGamesResponse:
@@ -721,7 +667,7 @@ class RAClient:
         Params:
             f: Must be set to 1.
         """
-        result = self._call_api("API_GetTicketData.php?", {"f": focus}).json()
+        result = self.call_api("API_GetTicketData.php?", {"f": focus}).json()
         return result
 
     def get_most_recent_tickets(
@@ -734,7 +680,7 @@ class RAClient:
             c: Count, the number of records to return (default = 10, max = 100)
             o: Offset, the number of entries to skip (default = 0)
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetTicketData.php?", {"c": count, "o": offset}
         ).json()
         return result
@@ -754,7 +700,7 @@ class RAClient:
             raise ValueError(
                 "Invalid focus value. Must be 3 (official) or 5 (unofficial)."
             )
-        result = self._call_api(
+        result = self.call_api(
             "API_GetTicketData.php?", {"g": game, "f": focus, "d": depth}
         ).json()
         return result
@@ -769,7 +715,7 @@ class RAClient:
             u: Username or ULID to query
             i: ULID to query
         """
-        result = self._call_api(
+        result = self.call_api(
             "API_GetTicketData.php?", {"u": username, "i": ulid}
         ).json()
         return result
@@ -783,5 +729,5 @@ class RAClient:
         Params:
             a: The achievement ID to query
         """
-        result = self._call_api("API_GetTicketData.php?", {"a": achievement}).json()
+        result = self.call_api("API_GetTicketData.php?", {"a": achievement}).json()
         return result
