@@ -4,9 +4,18 @@ import logging
 import requests
 
 from retroachievements import __version__
+from retroachievements.models.get_achievement_of_the_week import (
+    GetAchievementOfTheWeekResponse,
+)
+from retroachievements.models.get_achievement_unlocks import (
+    GetAchievementUnlocksResponse,
+)
+from retroachievements.models.get_comments import GetCommentsResponse
+from retroachievements.models.get_console_ids import GetConsoleIdsResponse
 from retroachievements.models.get_game_leaderboards_response import (
     GetGameLeaderboardsResponse,
 )
+from retroachievements.models.get_game_list import GetGameListResponse
 from retroachievements.models.get_game_response import GetGameResponse
 from retroachievements.models.get_leaderboard_entries_response import (
     GetLeaderboardEntriesResponse,
@@ -518,7 +527,7 @@ class RAClient:
 
     # System Endpoints
 
-    def get_console_ids(self) -> list:
+    def get_console_ids(self) -> GetConsoleIdsResponse:
         """
         Get the complete list of console ID and name pairs on the site
 
@@ -530,7 +539,7 @@ class RAClient:
 
     def get_game_list(
         self, system: int, has_achievements: int = 0, hashes: int = 0
-    ) -> dict:
+    ) -> GetGameListResponse:
         """
         Get the complete list of games for a console
 
@@ -552,7 +561,7 @@ class RAClient:
 
     def get_achievement_unlocks(
         self, achievement: int, count: int = 50, offset: int = 0
-    ) -> dict:
+    ) -> GetAchievementUnlocksResponse:
         """
         Get the unlocks for an achievement
 
@@ -576,7 +585,7 @@ class RAClient:
         count: int = 100,
         offset: int = 0,
         sort: str = "submitted",
-    ) -> dict:
+    ) -> GetCommentsResponse:
         """
         Get comments for a game or achievement
 
@@ -669,7 +678,7 @@ class RAClient:
 
     # Event Endpoints
 
-    def get_achievement_of_the_week(self) -> dict:
+    def get_achievement_of_the_week(self) -> GetAchievementOfTheWeekResponse:
         """
         Get the achievement of the week
 
