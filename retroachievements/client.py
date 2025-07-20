@@ -1,5 +1,5 @@
 import datetime
-import warnings
+import logging
 
 import requests
 
@@ -52,6 +52,8 @@ from retroachievements.types import (
 
 _BASE_URL = "https://retroachievements.org/API/"
 
+logger = logging.getLogger(__name__)
+
 
 class RAClient:
     """
@@ -71,26 +73,6 @@ class RAClient:
             params = {}
         params.update({"y": self.api_key})
         return params
-
-    def is_valid_game_csv(self, value: str | int) -> bool:
-        """
-        Validates if the given value is a valid game CSV string or integer.
-
-        Example of valid game CSV:
-          12345,
-          "12345"
-          "12345, 67890"
-          "123, 456, 789"
-
-        Example of invalid game ID:
-          "123a"
-          "123,,456"
-          "123, "
-        """
-        if isinstance(value, int):
-            return True
-        parts = value.split(",")
-        return all(part.strip().isdigit() for part in parts if part)
 
     # URL construction
     def _call_api(
@@ -250,27 +232,22 @@ class RAClient:
         result = self._call_api("API_GetUserPoints.php?", {"u": user}).json()
         return result
 
-    def get_user_progress(self, user: str, game: str | int) -> GetUserProgressResponse:
+    def get_user_progress(self, user: str, games: list[int]) -> GetUserProgressResponse:
         """
-        Get a user's progress in a game
+        Get a user's progress in a game.
 
         Params:
-            u: Username or ULID to query
-            i: Game ID to query
-
-        Information:
-            Unless you are explicitly wanting summary progress details for specific game IDs, get_user_completion_progress will almost certainly be better-suited for your use case.
+            u: Username or ULID to query.
+            i: List of games IDs to query separated by a comma.
         """
-        warnings.warn(
-            "Unless you are explicitly wanting summary progress details for specific game IDs, get_user_completion_progress will almost certainly be better-suited for your use case.",
-            Warning,
-            stacklevel=2,
+        logger.warning(
+            "Unless you are explicitly wanting summary progress details for specific "
+            "game IDs, get_user_completion_progress will almost certainly be "
+            "better-suited for your use case."
         )
-        if not self.is_valid_game_csv(game):
-            raise ValueError("Invalid game ID or CSV format")
-
         result = self._call_api(
-            "API_GetUserProgress.php?", {"u": user, "i": game}
+            "API_GetUserProgress.php?",
+            {"u": user, "i": ",".join([str(game) for game in games])},
         ).json()
         return result
 
@@ -291,7 +268,7 @@ class RAClient:
         return result
 
     def get_user_summary(
-        self, user: str, games: int = 0, achievements: int = 10
+        self, user: str, games_count: int = 0, achievements_count: int = 10
     ) -> GetUserSummaryResponse:
         """
         Get a user's exhaustive profile metadata
@@ -300,21 +277,20 @@ class RAClient:
             u: Username or ULID to query
             g: Number of recent games to fetch, default = 0
             a: Number of recent achievements to fetch, default = 10
-
-        Information:
-            This endpoint is known to be slow, and often results in over-fetching. For basic user profile information, try the get_user_profile endpoint. For user completion and game progress information, try the get_user_completion_progress endpoint.
-
-            Recent achievements are pulled from recent games, so if you ask for 1 game and 10 achievements, and the user has only earned 8 achievements in the most recent game, you'll only get 8 recent achievements back. Similarly, with the default of 0 recent games, no recent achievements will be returned.
         """
-        warnings.warn(
-            "This endpoint is known to be slow, and often results in over-fetching. For basic user profile information, try the get_user_profile endpoint. For user completion and game progress information, try the get_user_completion_progress endpoint."
-            "Recent achievements are pulled from recent games, so if you ask for 1 game and 10 achievements, and the user has only earned 8 achievements in the most recent game, you'll only get 8 recent achievements back. Similarly, with the default of 0 recent games, no recent achievements will be returned.",
-            Warning,
-            stacklevel=2,
+        logger.warning(
+            "This endpoint is known to be slow, and often results in over-fetching. For "
+            "basic user profile information, try the get_user_profile endpoint. For user "
+            "completion and game progress information, try the "
+            "get_user_completion_progress endpoint. Recent achievements are pulled from "
+            "recent games, so if you ask for 1 game and 10 achievements, and the user "
+            "has only earned 8 achievements in the most recent game, you'll only get 8 "
+            "recent achievements back. Similarly, with the default of 0 recent games, no "
+            "recent achievements will be returned.",
         )
         result = self._call_api(
             "API_GetUserSummary.php?",
-            {"u": user, "g": games, "a": achievements},
+            {"u": user, "g": games_count, "a": achievements_count},
         ).json()
         return result
 
@@ -328,10 +304,9 @@ class RAClient:
         Information:
             This endpoint is considered "legacy". The get_user_completion_progress endpoint will almost always be a better fit for your use case.
         """
-        warnings.warn(
-            "This endpoint is considered 'legacy'. The get_user_completion_progress endpoint will almost always be a better fit for your use case.",
-            DeprecationWarning,
-            stacklevel=2,
+        logger.warning(
+            "This endpoint is considered 'legacy'. The get_user_completion_progress "
+            "endpoint will almost always be a better fit for your use case."
         )
         result = self._call_api("API_GetUserCompletedGames.php?", {"u": user}).json()
         return result
@@ -414,7 +389,9 @@ class RAClient:
         result = self._call_api("API_GetGame.php?", {"i": game}).json()
         return result
 
-    def get_game_extended(self, game: int, focus: int = 3) -> GetGameExtendedResponse:
+    def get_game_extended(
+        self, game: int, get_unofficial_achievements: bool = False
+    ) -> GetGameExtendedResponse:
         """
         Get extended metadata about a game
 
@@ -422,10 +399,9 @@ class RAClient:
             i: The game ID to query
             f: Set to 3 for Official achievements, 5 to see Unofficial / Demoted achievements, default = 3
         """
-        if focus not in [3, 5]:
-            raise ValueError("Invalid set type selected. Must be 3 or 5.")
+        unofficial = 5 if get_unofficial_achievements else 3
         result = self._call_api(
-            "API_GetGameExtended.php?", {"i": game, "f": focus}
+            "API_GetGameExtended.php?", {"i": game, "f": unofficial}
         ).json()
         return result
 
