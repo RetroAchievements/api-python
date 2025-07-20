@@ -293,3 +293,49 @@ class GetUserClaimsResponseEntity(TypedDict):
 
 
 GetUserClaimsResponse = list[GetUserClaimsResponseEntity]
+
+
+class GetUserGameRankAndScoreResponseEntity(TypedDict):
+    User: str
+    TotalScore: str
+    LastAward: str
+    UserRank: str
+
+
+GetUserGameRankAndScoreResponse = list[GetUserGameRankAndScoreResponseEntity]
+
+
+class GetUserPointsResponse(TypedDict):
+    Points: int
+    SoftcorePoints: int
+
+
+class UserProgressResponseEntity(TypedDict):
+    NumPossibleAchievements: str
+    PossibleScore: str
+    NumAchieved: int | str
+    ScoreAchieved: int | str
+    NumAchievedHardcore: int | str
+    ScoreAchievedHardcore: int | str
+
+
+GetUserProgressResponse = dict[str, UserProgressResponseEntity]
+
+
+class UserRecentlyPlayedGameResponseEntity(TypedDict):
+    GameID: str
+    ConsoleID: str
+    ConsoleName: str
+    Title: str
+    ImageIcon: str
+    LastPlayed: str
+    MyVote: Literal["1", "2", "3", "4", "5"] | None
+    NumPossibleAchievements: str
+    PossibleScore: str
+    NumAchieved: int | str
+    ScoreAchieved: int | str
+    NumAchievedHardcore: int | str
+    ScoreAchievedHardcore: int | str
+
+
+GetUserRecentlyPlayedGamesResponse = list[UserRecentlyPlayedGameResponseEntity]

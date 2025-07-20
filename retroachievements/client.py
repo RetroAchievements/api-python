@@ -18,7 +18,11 @@ from retroachievements.types import (
     GetUserAwardsResponse,
     GetUserClaimsResponse,
     GetUserCompletionProgressResponseEntity,
+    GetUserGameRankAndScoreResponse,
+    GetUserPointsResponse,
+    GetUserProgressResponse,
     GetUserRecentAchievementsResponse,
+    GetUserRecentlyPlayedGamesResponse,
     UserProfileResponse,
 )
 
@@ -197,7 +201,9 @@ class RAClient:
         result = self._call_api("API_GetUserClaims.php?", {"u": user}).json()
         return result
 
-    def get_user_game_rank_and_score(self, user: str, game: int) -> dict:
+    def get_user_game_rank_and_score(
+        self, user: str, game: int
+    ) -> GetUserGameRankAndScoreResponse:
         """
         Get a user's rank and score in a game
 
@@ -210,7 +216,7 @@ class RAClient:
         ).json()
         return result
 
-    def get_user_points(self, user: str) -> dict:
+    def get_user_points(self, user: str) -> GetUserPointsResponse:
         """
         Get a user's total hardcore and softcore points
 
@@ -220,7 +226,7 @@ class RAClient:
         result = self._call_api("API_GetUserPoints.php?", {"u": user}).json()
         return result
 
-    def get_user_progress(self, user: str, game: str | int) -> dict:
+    def get_user_progress(self, user: str, game: str | int) -> GetUserProgressResponse:
         """
         Get a user's progress in a game
 
@@ -246,7 +252,7 @@ class RAClient:
 
     def get_user_recently_played_games(
         self, user: str, count: int = 10, offset: int = 0
-    ) -> dict:
+    ) -> GetUserRecentlyPlayedGamesResponse:
         """
         Get a user's recently played games
 
@@ -262,7 +268,7 @@ class RAClient:
 
     def get_user_summary(
         self, user: str, games: int = 0, achievements: int = 10
-    ) -> dict:
+    ) -> GetUserSummaryResponse:
         """
         Get a user's exhaustive profile metadata
 
