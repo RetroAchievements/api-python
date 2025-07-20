@@ -10,8 +10,13 @@ from retroachievements.types import (
     GetAchievementDistributionResponse,
     GetGameExtendedResponse,
     GetGameHashesResponse,
+    GetGameInfoAndUserProgressResponse,
     GetGameRankAndScoreResponse,
+    GetRecentGameAwardsResponse,
+    GetSetClaimsResponse,
+    GetTopTenUsersResponse,
     GetUserAwardsResponse,
+    GetUserClaimsResponse,
     GetUserCompletionProgressResponseEntity,
     GetUserRecentAchievementsResponse,
     UserProfileResponse,
@@ -30,7 +35,7 @@ class RAClient:
     def __init__(self, api_key: str):
         self.api_key = api_key
 
-    def url_params(self, params: dict[str, str | int] | None = None):
+    def url_params(self, params: dict[str, str | int | None] | None = None):
         """
         Inserts the auth and query params into the request
         """
@@ -63,7 +68,7 @@ class RAClient:
     def _call_api(
         self,
         endpoint: str | None = None,
-        params: dict[str, str | int] | None = None,
+        params: dict[str, str | int | None] | None = None,
         timeout: int = 30,
         headers: dict[str, str] | None = None,
     ):
@@ -140,7 +145,7 @@ class RAClient:
 
     def get_game_info_and_user_progress(
         self, user: str, game: int, awards: int = 0
-    ) -> dict:
+    ) -> GetGameInfoAndUserProgressResponse:
         """
         Get a user's progress in a game, including game metadata
 
@@ -182,7 +187,7 @@ class RAClient:
         result = self._call_api("API_GetUserAwards.php?", {"u": user}).json()
         return result
 
-    def get_user_claims(self, user: str) -> dict:
+    def get_user_claims(self, user: str) -> GetUserClaimsResponse:
         """
         Get a user's claims
 
@@ -591,7 +596,7 @@ class RAClient:
         offset: int = 0,
         count: int = 25,
         kind: str | None = None,
-    ) -> dict:
+    ) -> GetRecentGameAwardsResponse:
         """
         Get recent game awards
 
@@ -618,7 +623,7 @@ class RAClient:
         ).json()
         return result
 
-    def get_active_claims(self) -> dict:
+    def get_active_claims(self) -> GetSetClaimsResponse:
         """
         Get the list of active active claims (1000 max)
 
@@ -628,7 +633,7 @@ class RAClient:
         result = self._call_api("API_GetActiveClaims.php?", {}).json()
         return result
 
-    def get_inactive_claims(self, kind: int = 1) -> dict:
+    def get_inactive_claims(self, kind: int = 1) -> GetSetClaimsResponse:
         """
         Get the list of inactive claims, inactive claims are claims that have been completed, dropped or expired.
 
@@ -642,7 +647,7 @@ class RAClient:
         result = self._call_api("API_GetInactiveClaims.php?", {"k": kind}).json()
         return result
 
-    def get_top_ten_users(self) -> dict:
+    def get_top_ten_users(self) -> GetTopTenUsersResponse:
         """
         Get the top ten users on the site
 

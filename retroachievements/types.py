@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Literal, TypedDict
 
 AchievementType = Literal["progression", "win_condition", "missable"] | None
-AwardKind = Literal["beaten-softcore", "beaten-hardcore", "completed", "mastered"]
+AwardKindType = Literal["beaten-softcore", "beaten-hardcore", "completed", "mastered"]
 AwardType = Literal[
     "Achievement Points Yield",
     "Achievement Unlocks Yield",
@@ -84,7 +84,7 @@ class GetUserCompletionProgressResponseEntity(TypedDict):
     NumAwarded: int
     NumAwardedHardcore: int
     MostRecentAwardedDate: str | None
-    HighestAwardKind: AwardKind | None
+    HighestAwardKind: AwardKindType | None
     HighestAwardDate: str | None
 
 
@@ -115,6 +115,13 @@ class GameExtendedRawAchievementEntity(TypedDict):
     MemAddr: str
 
 
+class GameExtendedRawAchievementEntityWithUserProgress(
+    GameExtendedRawAchievementEntity
+):
+    DateEarned: str
+    DateEarnedHardcore: str
+
+
 class GameExtendedRawClaimEntity(TypedDict):
     User: str
     SetType: str
@@ -123,7 +130,7 @@ class GameExtendedRawClaimEntity(TypedDict):
     Expiration: str
 
 
-class GetGameExtendedResponse(TypedDict):
+class GetGameExtendedResponseWithoutClaims(TypedDict):
     ID: int
     Title: str
     ConsoleID: int
@@ -143,6 +150,9 @@ class GetGameExtendedResponse(TypedDict):
     NumAchievements: int
     NumDistinctPlayersCasual: str
     NumDistinctPlayersHardcore: str
+
+
+class GetGameExtendedResponse(GetGameExtendedResponseWithoutClaims):
     Claims: list[GameExtendedRawClaimEntity]
     Achievements: dict[int, GameExtendedRawAchievementEntity] | list[int]
 
@@ -198,3 +208,88 @@ class GetUserAwardsResponse(TypedDict):
     EventAwardsCount: int
     SiteAwardsCount: int
     VisibleUserAwards: list[GetUserAwardsEntity]
+
+
+class GetRecentGameAwardsEntity(TypedDict):
+    User: str
+    AwardKind: AwardKindType
+    AwardDate: str
+    GameID: int
+    GameTitle: str
+    ConsoleID: int
+    ConsoleName: str
+
+
+class GetRecentGameAwardsResponse(TypedDict):
+    Count: int
+    Total: int
+    Results: list[GetRecentGameAwardsEntity]
+
+
+class SetClaimResponseEntity(TypedDict):
+    ID: int
+    User: str
+    GameID: int
+    GameTitle: str
+    GameIcon: str
+    ConsoleName: str
+    ConsoleID: int
+    ClaimType: int
+    SetType: int
+    Status: int
+    Extension: int
+    Special: int
+    Created: str
+    DoneTime: str
+    Updated: str
+    MinutesLeft: int
+    UserIsJrDev: Literal[0, 1]
+
+
+GetSetClaimsResponse = list[SetClaimResponseEntity]
+
+
+TopTenUsersResponseEntity = TypedDict(
+    "TopTenUsersResponseEntity",
+    {
+        "1": str,  # Username
+        "2": str,  # Total points earned by the user
+        "3": str,  # Total ratio (white) points earned by the user
+    },
+)
+
+
+GetTopTenUsersResponse = list[TopTenUsersResponseEntity]
+
+
+class GetGameInfoAndUserProgressResponse(GetGameExtendedResponseWithoutClaims):
+    Achievements: dict[int, GameExtendedRawAchievementEntityWithUserProgress]
+
+    NumAwardedToUser: int
+    NumAwardedToUserHardcore: int
+    UserCompletion: str
+    UserCompletionHardcore: str
+
+    HighestAwardKind: AwardKindType | None
+    HighestAwardDate: str | None
+
+
+class GetUserClaimsResponseEntity(TypedDict):
+    ID: str
+    User: str
+    GameID: str
+    GameTitle: str
+    GameIcon: str
+    ConsoleName: str
+    ClaimType: str
+    SetType: str
+    Status: str
+    Extension: str
+    Special: str
+    Created: str
+    DoneTime: str
+    Updated: str
+    MinutesLeft: str
+
+
+GetUserClaimsResponse = list[GetUserClaimsResponseEntity]
