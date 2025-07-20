@@ -51,6 +51,10 @@ from retroachievements.endpoints.get_users_following_me_response import (
 from retroachievements.endpoints.get_users_i_follow_response import (
     GetUsersIFollowResponse,
 )
+from retroachievements.endpoints.user.get_achievements_earned_between import (
+    DatedUserAchievementResponse,
+    get_achievements_earned_between,
+)
 from retroachievements.endpoints.user.get_user_profile import (
     get_user_profile,
 )
@@ -58,7 +62,6 @@ from retroachievements.endpoints.user.get_user_recent_achievements import (
     get_user_recent_achievements,
 )
 from retroachievements.types import (
-    DatedUserAchievementResponse,
     GetAchievementCountResponse,
     GetAchievementDistributionResponse,
     GetGameExtendedResponse,
@@ -91,21 +94,18 @@ class RAClient(BaseRAClient):
     ):
         return get_user_recent_achievements(self, username, recent_minutes)
 
-    def get_user_achievements_earned_between(
-        self, user: str, start: int, end: int
-    ) -> DatedUserAchievementResponse:
-        """
-        Get a user's achievements in a range
-
-        Params:
-            u: Username or ULID to query
-            f: Epoch timestamp. Time range start.
-            t: Epoch timestamp. Time range end.
-        """
-        result = self.call_api(
-            "API_GetAchievementsEarnedBetween.php?", {"u": user, "s": start, "e": end}
-        ).json()
-        return result
+    def get_achievements_earned_between(
+        self: BaseRAClient,
+        username: str,
+        from_datetime: datetime.datetime,
+        to_datetime: datetime.datetime,
+    ):
+        return get_achievements_earned_between(
+            self,
+            username,
+            from_datetime,
+            to_datetime,
+        )
 
     def get_user_achievements_earned_on_day(
         self, user: str, date: str

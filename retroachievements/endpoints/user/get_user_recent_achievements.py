@@ -32,9 +32,9 @@ def get_user_recent_achievements(
     last hour.
 
     Params:
-        username(str): The user for which to retrieve the recent achievements for.
-        recent_minutes(int): Defaults to 60. How many minutes back to fetch for the
-                             given user.
+        username (str): The user for which to retrieve the recent achievements for.
+        recent_minutes (int): Defaults to 60. How many minutes back to fetch for the
+                              given user.
     """
     result = self.call_api(
         "API_GetUserRecentAchievements.php?", {"u": username, "m": recent_minutes}

@@ -14,28 +14,6 @@ AwardType = Literal[
 ]
 
 
-class DatedUserAchievementResponseEntity(TypedDict):
-    Date: str
-    HardcoreMode: str
-    AchievementID: str
-    Title: str
-    Description: str
-    BadgeName: str
-    Points: str
-    Author: str
-    GameTitle: str
-    GameIcon: str
-    GameID: str
-    ConsoleName: str
-    CumulScore: int
-    BadgeURL: str
-    GameURL: str
-    Type: AchievementType
-
-
-DatedUserAchievementResponse = list[DatedUserAchievementResponseEntity]
-
-
 class GetUserCompletionProgressResponseEntity(TypedDict):
     GameID: int
     Title: str
