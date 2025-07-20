@@ -4,6 +4,24 @@ import warnings
 import requests
 
 from retroachievements import __version__
+from retroachievements.models.get_game_leaderboards_response import (
+    GetGameLeaderboardsResponse,
+)
+from retroachievements.models.get_game_response import GetGameResponse
+from retroachievements.models.get_user_completed_games_response import (
+    GetUserCompletedGamesResponse,
+)
+from retroachievements.models.get_user_set_requests_response import (
+    GetUserSetRequestsResponse,
+)
+from retroachievements.models.get_user_summary_response import GetUserSummaryResponse
+from retroachievements.models.get_user_want_to_play_list_response import (
+    GetUserWantToPlayListResponse,
+)
+from retroachievements.models.get_users_following_me_response import (
+    GetUsersFollowingMeResponse,
+)
+from retroachievements.models.get_users_i_follow_response import GetUsersIFollowResponse
 from retroachievements.types import (
     DatedUserAchievementResponse,
     GetAchievementCountResponse,
@@ -294,7 +312,7 @@ class RAClient:
         ).json()
         return result
 
-    def get_user_completed_games(self, user: str) -> dict:
+    def get_user_completed_games(self, user: str) -> GetUserCompletedGamesResponse:
         """
         Get a user's completed games
 
@@ -314,7 +332,7 @@ class RAClient:
 
     def get_user_want_to_play_list(
         self, user: str, count: int = 100, offset: int = 0
-    ) -> dict:
+    ) -> GetUserWantToPlayListResponse:
         """
         Get a user's 'Want to Play' list
 
@@ -328,7 +346,9 @@ class RAClient:
         ).json()
         return result
 
-    def get_users_i_follow(self, user: str, count: int = 100, offset: int = 0) -> dict:
+    def get_users_i_follow(
+        self, user: str, count: int = 100, offset: int = 0
+    ) -> GetUsersIFollowResponse:
         """
         Get a list of users that the specified user follows
 
@@ -344,7 +364,7 @@ class RAClient:
 
     def get_users_following_me(
         self, user: str, count: int = 100, offset: int = 0
-    ) -> dict:
+    ) -> GetUsersFollowingMeResponse:
         """
         Get a list of users that follow the specified user
 
@@ -358,7 +378,9 @@ class RAClient:
         ).json()
         return result
 
-    def get_user_set_requests(self, user: str, list_type: int = 0) -> dict:
+    def get_user_set_requests(
+        self, user: str, list_type: int = 0
+    ) -> GetUserSetRequestsResponse:
         """
         Get a user's set requests
 
@@ -376,7 +398,7 @@ class RAClient:
 
     # Game endpoints
 
-    def get_game(self, game: int) -> dict:
+    def get_game(self, game: int) -> GetGameResponse:
         """
         Get basic metadata about a game
 
@@ -463,7 +485,7 @@ class RAClient:
 
     def get_game_leaderboards(
         self, game: int, count: int = 100, offset: int = 0
-    ) -> dict:
+    ) -> GetGameLeaderboardsResponse:
         """
         Get the leaderboards for a game
 
