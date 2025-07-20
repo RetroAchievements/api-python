@@ -7,19 +7,33 @@ from retroachievements import __version__
 from retroachievements.models.get_achievement_of_the_week import (
     GetAchievementOfTheWeekResponse,
 )
+from retroachievements.models.get_achievement_ticket_stats import (
+    GetAchievementTicketStatsResponse,
+)
 from retroachievements.models.get_achievement_unlocks import (
     GetAchievementUnlocksResponse,
 )
 from retroachievements.models.get_comments import GetCommentsResponse
 from retroachievements.models.get_console_ids import GetConsoleIdsResponse
+from retroachievements.models.get_developer_ticket_stats import (
+    GetDeveloperTicketStatsResponse,
+)
 from retroachievements.models.get_game_leaderboards_response import (
     GetGameLeaderboardsResponse,
 )
 from retroachievements.models.get_game_list import GetGameListResponse
 from retroachievements.models.get_game_response import GetGameResponse
+from retroachievements.models.get_game_ticket_stats import GetGameTicketStatsResponse
 from retroachievements.models.get_leaderboard_entries_response import (
     GetLeaderboardEntriesResponse,
 )
+from retroachievements.models.get_most_recent_tickets import (
+    GetMostRecentTicketsResponse,
+)
+from retroachievements.models.get_most_ticketed_games import (
+    GetMostTicketedGamesResponse,
+)
+from retroachievements.models.get_ticket_by_id import GetTicketByIdResponse
 from retroachievements.models.get_user_completed_games_response import (
     GetUserCompletedGamesResponse,
 )
@@ -690,7 +704,7 @@ class RAClient:
 
     # Ticket Endpoints
 
-    def get_ticket_data(self, ticket_id: int) -> dict:
+    def get_ticket_by_id(self, ticket_id: int) -> GetTicketByIdResponse:
         """
         Get the data for a specific ticket
 
@@ -700,7 +714,7 @@ class RAClient:
         result = self._call_api("API_GetTicketData.php?", {"i": ticket_id}).json()
         return result
 
-    def get_most_ticketed_games(self, focus: int = 1) -> dict:
+    def get_most_ticketed_games(self, focus: int = 1) -> GetMostTicketedGamesResponse:
         """
         Get the most ticketed games
 
@@ -710,7 +724,9 @@ class RAClient:
         result = self._call_api("API_GetTicketData.php?", {"f": focus}).json()
         return result
 
-    def get_most_recent_tickets(self, count: int = 10, offset: int = 0) -> dict:
+    def get_most_recent_tickets(
+        self, count: int = 10, offset: int = 0
+    ) -> GetMostRecentTicketsResponse:
         """
         Get the most recent tickets
 
@@ -723,7 +739,9 @@ class RAClient:
         ).json()
         return result
 
-    def get_game_ticket_stats(self, game: int, focus: int = 3, depth: int = 0) -> dict:
+    def get_game_ticket_stats(
+        self, game: int, focus: int = 3, depth: int = 0
+    ) -> GetGameTicketStatsResponse:
         """
         Get the ticket stats for a game
 
@@ -741,7 +759,9 @@ class RAClient:
         ).json()
         return result
 
-    def get_developer_ticket_stats(self, username: str, ulid: str) -> dict:
+    def get_developer_ticket_stats(
+        self, username: str, ulid: str
+    ) -> GetDeveloperTicketStatsResponse:
         """
         Get the ticket stats for a developer
 
@@ -754,7 +774,9 @@ class RAClient:
         ).json()
         return result
 
-    def get_achievement_ticket_stats(self, achievement: int) -> dict:
+    def get_achievement_ticket_stats(
+        self, achievement: int
+    ) -> GetAchievementTicketStatsResponse:
         """
         Get the ticket stats for an achievement
 

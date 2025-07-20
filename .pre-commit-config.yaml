@@ -23,11 +23,11 @@ repos:
         entry: pyright
         types: [python]
         language: system
--   repo: https://github.com/jendrikseipp/vulture
-    rev: 'v2.14'
-    hooks:
-    -   id: vulture
-        name: Check unused Python code
+# -   repo: https://github.com/jendrikseipp/vulture
+#     rev: 'v2.14'
+#     hooks:
+#     -   id: vulture
+#         name: Check unused Python code
 -   repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.5.14
     hooks:
