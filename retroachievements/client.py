@@ -503,7 +503,12 @@ class RAClient(BaseRAClient):
         return result
 
     def get_game_list(
-        self, system: int, has_achievements: int = 0, hashes: int = 0
+        self,
+        system: int,
+        has_achievements: int = 0,
+        hashes: int = 0,
+        offset: int = 0,
+        count: int = 0,
     ) -> GetGameListResponse:
         """
         Get the complete list of games for a console
@@ -512,13 +517,16 @@ class RAClient(BaseRAClient):
             i: The system ID to query
             f: If 1, only returns games that have achievements (default = 0)
             h: If 1, also return the supported hashes for games (default = 0)
+            o: Offset of the list of results. Ignores the first X results set in this parameter. Defaults to 0. Useful for pagination.
+            c: Number of max results desired. Defaults to 0, which means, all the results. Useful for pagination.
         """
         if has_achievements not in [0, 1]:
             raise ValueError("Invalid has_cheevos value. Must be 0 or 1.")
         if hashes not in [0, 1]:
             raise ValueError("Invalid hashes value. Must be 0 or 1.")
         result = self.call_api(
-            "API_GetGameList.php?", {"i": system, "f": has_achievements, "h": hashes}
+            "API_GetGameList.php?",
+            {"i": system, "f": has_achievements, "h": hashes, "o": offset, "c": count},
         ).json()
         return result
 
