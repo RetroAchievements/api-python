@@ -62,6 +62,7 @@ from retroachievements.endpoints.user.get_user_recent_achievements import (
     get_user_recent_achievements,
 )
 from retroachievements.types import (
+    GameAwardKind,
     GetAchievementCountResponse,
     GetAchievementDistributionResponse,
     GetGameExtendedResponse,
@@ -587,7 +588,7 @@ class RAClient(BaseRAClient):
         date: str | None = None,
         offset: int = 0,
         count: int = 25,
-        kind: str | None = None,
+        kinds: list[GameAwardKind] | None = None,
     ) -> GetRecentGameAwardsResponse:
         """
         Get recent game awards
@@ -596,22 +597,21 @@ class RAClient(BaseRAClient):
             d: Date in YYYY-MM-DD format, default = now
             o: Offset, the number of entries to skip (default = 0)
             c: Count, the number of records to return (default = 25, max = 100)
-            k: Type of award to filter by (optional), possible values are 'beaten-softcore', 'beaten-hardcore', 'completed' and 'mastered'. If not specified, all awards will be returned.
+            k: A comma-separated list of desired game award kinds. Possible values are "beaten-softcore", "beaten-hardcore", "completed", and "mastered" (default: all game award kinds).
         """
         if date is None:
             date = datetime.date.today().strftime("%Y-%m-%d")
-        if kind is not None and kind not in [
-            "beaten-softcore",
-            "beaten-hardcore",
-            "completed",
-            "mastered",
-        ]:
-            raise ValueError(
-                "Invalid kind value. Must be one of 'beaten-softcore', 'beaten-hardcore', 'completed', or 'mastered'."
-            )
+        if kinds is None:
+            kinds = [
+                "beaten-softcore",
+                "beaten-hardcore",
+                "completed",
+                "mastered",
+            ]
+
         result = self.call_api(
             "API_GetRecentGameAwards.php?",
-            {"d": date, "o": offset, "c": count, "k": kind},
+            {"d": date, "o": offset, "c": count, "k": ",".join(kinds)},
         ).json()
         return result
 

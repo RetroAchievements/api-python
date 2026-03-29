@@ -12,6 +12,12 @@ AwardType = Literal[
     "Mastery/Completion",
     "Patreon Supporter",
 ]
+GameAwardKind = Literal[
+    "beaten-softcore",
+    "beaten-hardcore",
+    "completed",
+    "mastered",
+]
 
 
 class GetUserCompletionProgressResponseEntity(TypedDict):
