@@ -665,14 +665,20 @@ class RAClient(BaseRAClient):
         result = self.call_api("API_GetTicketData.php?", {"i": ticket_id}).json()
         return result
 
-    def get_most_ticketed_games(self, focus: int = 1) -> GetMostTicketedGamesResponse:
+    def get_most_ticketed_games(
+        self, focus: int = 1, count: int = 10, offset: int = 0
+    ) -> GetMostTicketedGamesResponse:
         """
         Get the most ticketed games
 
         Params:
             f: Must be set to 1.
+            c: Count, number of records to return (default: 10, max: 100).
+            o: Offset, number of entries to skip (default: 0).
         """
-        result = self.call_api("API_GetTicketData.php?", {"f": focus}).json()
+        result = self.call_api(
+            "API_GetTicketData.php?", {"f": focus, "c": count, "o": offset}
+        ).json()
         return result
 
     def get_most_recent_tickets(
