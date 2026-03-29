@@ -486,14 +486,20 @@ class RAClient(BaseRAClient):
 
     # System Endpoints
 
-    def get_console_ids(self) -> GetConsoleIdsResponse:
+    def get_console_ids(
+        self, active_systems_only: bool = False, gaming_systems_only: bool = False
+    ) -> GetConsoleIdsResponse:
         """
         Get the complete list of console ID and name pairs on the site
 
         Params:
-            None
+            a: If 1, only return active systems. Defaults to 0.
+            g: If 1, only return gaming systems (not Hubs, Events, etc). Defaults to 0.
         """
-        result = self.call_api("API_GetConsoleIDs.php?", {}).json()
+        result = self.call_api(
+            "API_GetConsoleIDs.php?",
+            {"a": int(active_systems_only), "g": int(gaming_systems_only)},
+        ).json()
         return result
 
     def get_game_list(
