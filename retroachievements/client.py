@@ -625,20 +625,6 @@ class RAClient(BaseRAClient):
         result = self.call_api("API_GetActiveClaims.php?", {}).json()
         return result
 
-    def get_inactive_claims(self, kind: int = 1) -> GetSetClaimsResponse:
-        """
-        Get the list of inactive claims, inactive claims are claims that have been completed, dropped or expired.
-
-        Params:
-            k: Kind of claim to return, 1 (completed), 2 (dropped), 3 (expired), default = 1
-        """
-        if kind not in [1, 2, 3]:
-            raise ValueError(
-                "Invalid kind value. Must be 1 (completed), 2 (dropped) or 3 (expired)."
-            )
-        result = self.call_api("API_GetInactiveClaims.php?", {"k": kind}).json()
-        return result
-
     def get_top_ten_users(self) -> GetTopTenUsersResponse:
         """
         Get the top ten users on the site
