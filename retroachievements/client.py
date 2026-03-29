@@ -73,7 +73,7 @@ from retroachievements.types import (
     GetTopTenUsersResponse,
     GetUserAwardsResponse,
     GetUserClaimsResponse,
-    GetUserCompletionProgressResponseEntity,
+    GetUserCompletionProgressResponse,
     GetUserGameRankAndScoreResponse,
     GetUserPointsResponse,
     GetUserProgressResponse,
@@ -142,7 +142,7 @@ class RAClient(BaseRAClient):
 
     def get_user_completion_progress(
         self, user: str, count: int = 100, offset: int = 0
-    ) -> GetUserCompletionProgressResponseEntity:
+    ) -> GetUserCompletionProgressResponse:
         """
         Get a user's completion progress in games
 
