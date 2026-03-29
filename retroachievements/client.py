@@ -297,7 +297,7 @@ class RAClient(BaseRAClient):
         return result
 
     def get_users_i_follow(
-        self, user: str, count: int = 100, offset: int = 0
+        self, count: int = 100, offset: int = 0
     ) -> GetUsersIFollowResponse:
         """
         Get a list of users that the specified user follows
@@ -308,23 +308,22 @@ class RAClient(BaseRAClient):
             o: Offset, the number of entries to skip (default = 0)
         """
         result = self.call_api(
-            "API_GetUsersIFollow.php?", {"u": user, "c": count, "o": offset}
+            "API_GetUsersIFollow.php?", {"c": count, "o": offset}
         ).json()
         return result
 
     def get_users_following_me(
-        self, user: str, count: int = 100, offset: int = 0
+        self, count: int = 100, offset: int = 0
     ) -> GetUsersFollowingMeResponse:
         """
         Get a list of users that follow the specified user
 
         Params:
-            u: Username or ULID to query
             c: Count, the number of records to return (default = 100, max = 500)
             o: Offset, the number of entries to skip (default = 0)
         """
         result = self.call_api(
-            "API_GetUsersFollowingMe.php?", {"u": user, "c": count, "o": offset}
+            "API_GetUsersFollowingMe.php?", {"c": count, "o": offset}
         ).json()
         return result
 
