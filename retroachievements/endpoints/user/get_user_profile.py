@@ -5,6 +5,7 @@ from retroachievements.base import BaseRAClient
 
 class UserProfileResponse(TypedDict):
     User: str
+    ULID: str
     UserPic: str
     MemberSince: str
     RichPresenceMsg: str
@@ -27,7 +28,7 @@ def get_user_profile(self: BaseRAClient, username: str) -> UserProfileResponse:
     targeted by username.
 
     Params:
-        username (str): The user for which to retrieve the summary for.
+        username (str): The target username or ULID.
     """
     result = self.call_api("API_GetUserProfile.php?", {"u": username}).json()
     return result

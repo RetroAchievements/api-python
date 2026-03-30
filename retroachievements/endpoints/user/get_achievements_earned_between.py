@@ -13,7 +13,10 @@ class DatedUserAchievementResponseEntity(TypedDict):
     Description: str
     BadgeName: str
     Points: str
+    Type: AchievementType
+    TrueRatio: int
     Author: str
+    AuthorULID: str
     GameTitle: str
     GameIcon: str
     GameID: str
@@ -21,7 +24,6 @@ class DatedUserAchievementResponseEntity(TypedDict):
     CumulScore: int
     BadgeURL: str
     GameURL: str
-    Type: AchievementType
 
 
 DatedUserAchievementResponse = list[DatedUserAchievementResponseEntity]
@@ -38,10 +40,10 @@ def get_achievements_earned_between(
     between two provided dates.
 
     Params:
-        username (str): The user for which to retrieve the list of achievements for.
+        username (str): The target username or ULID.
         from_datetime (datetime): A datetime object specifying when the list itself
                                   should begin.
-        to_datetime (datetime):  A datetime object specifying when the list itself *
+        to_datetime (datetime):  A datetime object specifying when the list itself
                                  should end.
     """
     result = self.call_api(

@@ -223,9 +223,11 @@ class GetGameInfoAndUserProgressResponse(GetGameExtendedResponseWithoutClaims):
 class GetUserClaimsResponseEntity(TypedDict):
     ID: str
     User: str
+    ULID: str
     GameID: str
     GameTitle: str
     GameIcon: str
+    ConsoleID: int
     ConsoleName: str
     ClaimType: str
     SetType: str
@@ -235,6 +237,7 @@ class GetUserClaimsResponseEntity(TypedDict):
     Created: str
     DoneTime: str
     Updated: str
+    UserIsJrDev: int
     MinutesLeft: str
 
 
@@ -243,9 +246,10 @@ GetUserClaimsResponse = list[GetUserClaimsResponseEntity]
 
 class GetUserGameRankAndScoreResponseEntity(TypedDict):
     User: str
-    TotalScore: str
+    ULID: str
+    UserRank: int
+    TotalScore: int
     LastAward: str
-    UserRank: str
 
 
 GetUserGameRankAndScoreResponse = list[GetUserGameRankAndScoreResponseEntity]
@@ -259,10 +263,10 @@ class GetUserPointsResponse(TypedDict):
 class UserProgressResponseEntity(TypedDict):
     NumPossibleAchievements: str
     PossibleScore: str
-    NumAchieved: int | str
-    ScoreAchieved: int | str
-    NumAchievedHardcore: int | str
-    ScoreAchievedHardcore: int | str
+    NumAchieved: int
+    ScoreAchieved: int
+    NumAchievedHardcore: int
+    ScoreAchievedHardcore: int
 
 
 GetUserProgressResponse = dict[str, UserProgressResponseEntity]
