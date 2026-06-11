@@ -289,14 +289,17 @@ class UserRecentlyPlayedGameResponseEntity(TypedDict):
     ConsoleName: str
     Title: str
     ImageIcon: str
+    ImageTitle: str
+    ImageIngame: str
+    ImageBoxArt: str
+    AchievementsTotal: int
     LastPlayed: str
-    MyVote: Literal["1", "2", "3", "4", "5"] | None
-    NumPossibleAchievements: str
-    PossibleScore: str
-    NumAchieved: int | str
-    ScoreAchieved: int | str
-    NumAchievedHardcore: int | str
-    ScoreAchievedHardcore: int | str
+    NumPossibleAchievements: int
+    PossibleScore: int
+    NumAchieved: int
+    ScoreAchieved: int
+    NumAchievedHardcore: int
+    ScoreAchievedHardcore: int
 
 
 GetUserRecentlyPlayedGamesResponse = list[UserRecentlyPlayedGameResponseEntity]
