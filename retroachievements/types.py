@@ -54,11 +54,13 @@ class GameExtendedRawAchievementEntity(TypedDict):
     Points: str
     TrueRatio: str
     Author: str
+    AuthorULID: str
     DateModified: str
     DateCreated: str
     BadgeName: str
     DisplayOrder: str
     MemAddr: str
+    type: AchievementType
 
 
 class GameExtendedRawAchievementEntityWithUserProgress(
@@ -100,7 +102,12 @@ class GetGameExtendedResponseWithoutClaims(TypedDict):
 
 class GetGameExtendedResponse(GetGameExtendedResponseWithoutClaims):
     Claims: list[GameExtendedRawClaimEntity]
-    Achievements: dict[int, GameExtendedRawAchievementEntity] | list[int]
+    Achievements: dict[int, GameExtendedRawAchievementEntity]
+    ReleasedAtGranularity: str
+    GuideURL: str | None
+    Updated: str
+    ParentGameID: int | None
+    NumDistinctPlayers: int
 
 
 class GameHashResult(TypedDict):
@@ -215,9 +222,13 @@ class GetGameInfoAndUserProgressResponse(GetGameExtendedResponseWithoutClaims):
     NumAwardedToUserHardcore: int
     UserCompletion: str
     UserCompletionHardcore: str
-
     HighestAwardKind: AwardKindType | None
     HighestAwardDate: str | None
+    ReleasedAtGranularity: str
+    GuideURL: str | None
+    ParentGameID: int | None
+    NumDistinctPlayers: int
+    UserTotalPlaytime: int
 
 
 class GetUserClaimsResponseEntity(TypedDict):
