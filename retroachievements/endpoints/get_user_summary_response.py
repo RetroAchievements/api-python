@@ -3,11 +3,15 @@ from typing import Literal, TypedDict
 
 class RecentlyPlayedGameEntity(TypedDict):
     GameID: str
-    ConsoleID: str
+    ConsoleID: int
     ConsoleName: str
     Title: str
     ImageIcon: str
+    ImageTitle: str
+    ImageIngame: str
+    ImageBoxArt: str
     LastPlayed: str
+    AchievementsTotal: int
 
 
 class LastGameEntity(TypedDict):
@@ -27,49 +31,64 @@ class LastGameEntity(TypedDict):
     IsFinal: bool
     ConsoleName: str
     RichPresencePatch: str
+    ReleasedAtGranularity: str
+
+
+class LastActivityEntity(TypedDict):
+    ID: str
+    timestamp: str
+    lastupdate: str
+    activitytype: str
+    User: str
+    data: str
+    data2: str
 
 
 class RecentlyAwardedAchievementEntity(TypedDict):
-    NumPossibleAchievements: str
-    PossibleScore: str
-    NumAchieved: int | str
-    ScoreAchieved: int | str
-    NumAchievedHardcore: int | str
-    ScoreAchievedHardcore: int | str
+    NumPossibleAchievements: int
+    PossibleScore: int
+    NumAchieved: int
+    ScoreAchieved: int
+    NumAchievedHardcore: int
+    ScoreAchievedHardcore: int
 
 
 class ExtendedRecentAchievementEntity(TypedDict):
-    ID: str
-    GameID: str
+    ID: int
+    GameID: int
     GameTitle: str
     Title: str
     Description: str
-    Points: str
+    Points: int
+    Type: str | None
     BadgeName: str
-    IsAwarded: Literal["1"]
+    IsAwarded: str
     DateAwarded: str
-    HardcoreAchieved: Literal["0"]
+    HardcoreAchieved: int
 
 
 class GetUserSummaryResponse(TypedDict):
+    User: str
+    ULID: str
+    RichPresenceMsgDate: str
     RecentlyPlayedCount: int
     RecentlyPlayed: list[RecentlyPlayedGameEntity]
     MemberSince: str
 
-    LastActivity: dict[str, str | int]
+    LastActivity: LastActivityEntity
 
     RichPresenceMsg: str
     LastGameID: str
     LastGame: LastGameEntity
-    ContribCount: str
-    ContribYield: str
-    TotalPoints: str
-    TotalSoftcorePoints: str
-    TotalTruePoints: str
-    Permissions: str
-    Untracked: Literal["0", "1"]
-    ID: str
-    UserWallActive: Literal["0", "1"]
+    ContribCount: int
+    ContribYield: int
+    TotalPoints: int
+    TotalSoftcorePoints: int
+    TotalTruePoints: int
+    Permissions: int
+    Untracked: Literal[0, 1]
+    ID: int
+    UserWallActive: Literal[0, 1]
     Motto: str
     Rank: int
     Awarded: dict[str, RecentlyAwardedAchievementEntity]

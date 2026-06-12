@@ -114,7 +114,7 @@ class GameHashResult(TypedDict):
     MD5: str
     Name: str
     Labels: list[str]
-    PatchUrl: str
+    PatchUrl: str | None
 
 
 class GetGameHashesResponse(TypedDict):
