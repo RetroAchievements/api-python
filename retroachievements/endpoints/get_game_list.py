@@ -3,8 +3,8 @@ from typing import TypedDict
 
 class RawGameListEntity(TypedDict):
     Title: str
-    ID: str
-    ConsoleID: str
+    ID: int
+    ConsoleID: int
     ConsoleName: str
     ImageIcon: str
     NumAchievements: int
