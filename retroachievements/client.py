@@ -711,18 +711,15 @@ class RAClient(BaseRAClient):
         return result
 
     def get_developer_ticket_stats(
-        self, username: str, ulid: str
+        self, username: str
     ) -> GetDeveloperTicketStatsResponse:
         """
         Get the ticket stats for a developer
 
         Params:
-            u: Username or ULID to query
-            i: ULID to query
+            u: The target developer's username or ULID.
         """
-        result = self.call_api(
-            "API_GetTicketData.php?", {"u": username, "i": ulid}
-        ).json()
+        result = self.call_api("API_GetTicketData.php?", {"u": username}).json()
         return result
 
     def get_achievement_ticket_stats(
