@@ -38,6 +38,6 @@ class BaseRAClient:
             f"{_BASE_URL}{endpoint}",
             params=self.url_params(params),
             timeout=timeout,
-            headers=headers,
+            headers=self.headers | (headers or {}),
         )
         return req
