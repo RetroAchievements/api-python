@@ -554,8 +554,8 @@ class RAClient(BaseRAClient):
 
     def get_comments(
         self,
-        game: int,
-        target: int,
+        target_id: int | str,
+        target_kind: int,
         count: int = 100,
         offset: int = 0,
         sort: str = "submitted",
@@ -564,13 +564,13 @@ class RAClient(BaseRAClient):
         Get comments for a game or achievement
 
         Params:
-            i: The game ID to query
-            t: The target ID (game = 1, achievement = 2, user/ulid = 3)
+            i: The target game or achievement ID (if type is 1 or 2). The target username or user ULID (if type is 3).
+            t: The target comment kind: 1 (game), 2 (achievement), or 3 (user). Required if type is 1 or 2.
             c: Count, the number of records to return (default = 100, max = 500)
             o: Offset, the number of entries to skip (default = 0)
             sort: Sort order, submitted = ascending, -submitted = descending, default = 'submitted'
         """
-        if target not in [1, 2, 3]:
+        if target_kind not in [1, 2, 3]:
             raise ValueError(
                 "Invalid target type. Must be 1 (game), 2 (achievement), or 3 (user/ulid)."
             )
@@ -578,7 +578,7 @@ class RAClient(BaseRAClient):
             raise ValueError("Invalid sort order. Must be 'submitted' or '-submitted'.")
         result = self.call_api(
             "API_GetComments.php?",
-            {"i": game, "t": target, "c": count, "o": offset, "sort": sort},
+            {"i": target_id, "t": target_kind, "c": count, "o": offset, "sort": sort},
         ).json()
         return result
 
