@@ -131,9 +131,10 @@ GetAchievementDistributionResponse = dict[str, int]
 
 class RawGameRankAndScoreEntity(TypedDict):
     User: str
-    TotalScore: str
+    ULID: str
+    NumAchievements: int
+    TotalScore: int
     LastAward: str
-    Rank: int
 
 
 GetGameRankAndScoreResponse = list[RawGameRankAndScoreEntity]
@@ -165,6 +166,7 @@ class GetUserAwardsResponse(TypedDict):
 
 class GetRecentGameAwardsEntity(TypedDict):
     User: str
+    ULID: str
     AwardKind: AwardKindType
     AwardDate: str
     GameID: int
@@ -182,6 +184,7 @@ class GetRecentGameAwardsResponse(TypedDict):
 class SetClaimResponseEntity(TypedDict):
     ID: int
     User: str
+    ULID: str
     GameID: int
     GameTitle: str
     GameIcon: str
@@ -208,6 +211,7 @@ TopTenUsersResponseEntity = TypedDict(
         "1": str,  # Username
         "2": str,  # Total points earned by the user
         "3": str,  # Total ratio (white) points earned by the user
+        "4": str,  # the user's unique queryable ULID
     },
 )
 

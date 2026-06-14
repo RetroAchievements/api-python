@@ -2,13 +2,13 @@ from typing import TypedDict
 
 
 class ReportedGameEntity(TypedDict):
-    gameId: int
-    gameTitle: str
-    gameIcon: str
-    console: str
-    openTickets: int
+    GameID: int
+    GameTitle: str
+    GameIcon: str
+    Console: str
+    OpenTickets: int
 
 
 class GetMostTicketedGamesResponse(TypedDict):
-    mostReportedGames: list[ReportedGameEntity]
-    url: str
+    MostReportedGames: list[ReportedGameEntity]
+    URL: str

@@ -3,10 +3,11 @@ from typing import TypedDict
 
 class AchievementUnlocksResponseEntity(TypedDict):
     User: str
-    RAPoints: str
-    RASoftcorePoints: str
+    ULID: str
+    RAPoints: int
+    RASoftcorePoints: int
     DateAwarded: str
-    HardcoreMode: str
+    HardcoreMode: int
 
 
 class GetAchievementUnlocksResponseEntity(TypedDict):
@@ -18,6 +19,8 @@ class GetAchievementUnlocksResponseEntity(TypedDict):
     Author: str
     DateCreated: str
     DateModified: str
+    AuthorULID: str
+    Type: str
 
 
 class ConsoleEntity(TypedDict):
@@ -36,4 +39,5 @@ class GetAchievementUnlocksResponse(TypedDict):
     Game: GameEntity
     UnlocksCount: int
     TotalPlayers: int
+    UnlocksHardcoreCount: int
     Unlocks: list[AchievementUnlocksResponseEntity]

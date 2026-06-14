@@ -2,8 +2,9 @@ from typing import TypedDict
 
 
 class GetAchievementTicketStatsResponse(TypedDict):
-    achievementId: int
-    achievementTitle: str
-    achievementDescription: str
-    url: str
-    openTickets: int
+    AchievementId: int
+    AchievementTitle: str
+    AchievementDescription: str
+    AchievementType: str
+    URL: str
+    OpenTickets: int

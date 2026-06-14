@@ -5,13 +5,13 @@ class AchievementOfTheWeekResponseEntity(TypedDict):
     ID: str
     Title: str
     Description: str
-    Points: str
-    TrueRatio: str
+    Points: int
+    TrueRatio: int
+    Type: str | None
     Author: str
+    AuthorULID: str
     DateCreated: str
     DateModified: str
-    BadgeName: str
-    BadgeURL: str
 
 
 class ConsoleEntity(TypedDict):
@@ -30,10 +30,11 @@ class GameEntity(TypedDict):
 
 class UnlocksEntity(TypedDict):
     User: str
-    RAPoints: str
-    RASoftcorePoints: str
+    ULID: str
+    RAPoints: int
+    RASoftcorePoints: int
     DateAwarded: str
-    HardcoreMode: str
+    HardcoreMode: int
 
 
 class GetAchievementOfTheWeekResponse(TypedDict):
@@ -42,6 +43,7 @@ class GetAchievementOfTheWeekResponse(TypedDict):
     ForumTopic: ForumTopicEntity
     Game: GameEntity
     StartAt: str
-    TotalPlayers: str
+    TotalPlayers: int
     Unlocks: list[UnlocksEntity]
-    UnlocksCount: str
+    UnlocksCount: int
+    UnlocksHardcoreCount: int
