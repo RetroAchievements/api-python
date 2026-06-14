@@ -423,7 +423,7 @@ class RAClient(BaseRAClient):
 
         Params:
             g: The game ID to query
-            t: Set to 0 for Latest Masters, 1 for High Scores, default = 0
+            t: 1 for latest masters. 0 for non-master high scores. Defaults to 0.
         """
         if list_type not in [0, 1]:
             raise ValueError("Invalid list type. Must be 0 or 1.")
